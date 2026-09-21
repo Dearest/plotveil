@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>PlotVeil · Product interaction QA</title>
+<style>
+*{box-sizing:border-box}body{font:14px/1.5 Arial,sans-serif;margin:32px;color:#24242b;background:#fafafa}
+main{max-width:1060px;margin:auto}h1{font-size:24px}h2{font-size:16px;margin-top:32px}.tools{display:flex;gap:8px;margin:20px 0;flex-wrap:wrap}button{cursor:pointer;font:inherit;padding:6px 12px}.icons{display:flex;gap:24px;flex-wrap:wrap}.icon{display:grid;justify-items:center;gap:10px}.sizes{display:flex;align-items:center;gap:10px}
+#movie_player{height:250px;position:relative;background:#202027;color:#f7efe5;border-radius:12px}.frame{padding:32px;font-size:22px}.ytp-right-controls{position:absolute;bottom:10px;right:16px;display:flex;align-items:center}.ytp-button{width:42px;height:42px;background:transparent;color:white;border:0;padding:0}
+ytd-comment-view-model{display:block;margin:24px 0;padding-left:52px;position:relative}.avatar{position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:#cacdd5}
+.author{font-weight:bold;margin-bottom:6px}#expander{font-size:14px;line-height:22px;min-height:22px}#content{margin:0}.translation{margin-top:4px;color:#727680}.actions{margin-top:12px;color:#74747d}.dark{background:#151518;color:#eee}html[dark] #movie_player{border:1px solid #4b4b55}
+pre{white-space:pre-wrap;padding:16px;background:#eeeef2;color:#24242b}.dark pre{color:#24242b}
+</style><main><h1>PlotVeil · functional states</h1><p>Local QA fixture · real adapter and runner · deterministic judgments</p><div class="icons" id="icons"></div>
+<div class="tools"><button id="theme">Toggle theme</button><button id="failure">Fail next checks</button><button id="add">Add comment</button><button id="navigate">Switch video</button><button id="checks">Run DOM checks</button></div>
+<div id="movie_player"><div class="frame">Keep the surprises.<br><small>Player control fixture</small></div><div class="ytp-right-controls"><button class="ytp-button" aria-label="Subtitles">CC</button><button class="ytp-button" aria-label="Settings">⚙</button><button class="ytp-button" aria-label="Fullscreen">⛶</button></div></div>
+<ytd-watch-metadata hidden><h1>Fictional film</h1><div id="owner"><ytd-channel-name><a>QA channel</a></ytd-channel-name></div></ytd-watch-metadata>
+<h2>Comments · translation compatibility</h2><div id="comments"></div><pre id="status"></pre><pre id="results">DOM checks not run</pre></main><script type="module" src="/docs/qa/product-fixture.ts"></script></html>

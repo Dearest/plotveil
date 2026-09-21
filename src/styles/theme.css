@@ -1,0 +1,224 @@
+@import "tailwindcss";
+
+/* Veil Keeper：低饱和中性色，琥珀色仅作焦点提示。 */
+:root {
+  --pv-paper: #FAF9F6;
+  --pv-paper-2: #F0F1F5;
+  --pv-rule: #DDE0E8;
+  --pv-ink: #24242B;
+  --pv-ink-2: #686B76;
+  --pv-curtain: #24242B;
+  --pv-curtain-2: #3A3A44;
+  --pv-curtain-ink: #FAF9F6;
+  --pv-radius: 4px;
+  --pv-ease: cubic-bezier(.2, .7, .2, 1);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pv-paper: #1C1C21;
+    --pv-paper-2: #27282E;
+    --pv-rule: #3A3C45;
+    --pv-ink: #F7EFE5;
+    --pv-ink-2: #ACAAB4;
+    --pv-curtain: #F7EFE5;
+    --pv-curtain-2: #E5DDD3;
+    --pv-curtain-ink: #24242B;
+    color-scheme: dark;
+  }
+}
+
+@theme {
+  --color-paper: var(--pv-paper);
+  --color-paper-2: var(--pv-paper-2);
+  --color-rule: var(--pv-rule);
+  --color-ink: var(--pv-ink);
+  --color-ink-2: var(--pv-ink-2);
+  --color-curtain: var(--pv-curtain);
+  --color-curtain-2: var(--pv-curtain-2);
+  --color-curtain-ink: var(--pv-curtain-ink);
+  --font-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --radius-pv: 4px;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-xl: 20px;
+  --text-3xl: 32px;
+}
+
+html, body {
+  margin: 0;
+  background: var(--pv-paper);
+  color: var(--pv-ink);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root { position: relative; z-index: 1; }
+.pv-popup body { width: 320px; overflow-x: hidden; }
+
+.pv-display {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-weight: 600;
+  letter-spacing: -.01em;
+}
+.pv-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-weight: 600;
+}
+.pv-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.pv-tear { border-top: 1px solid var(--pv-rule); margin: 16px 0; }
+
+/* 分组分隔线 */
+.pv-rule-short { width: 32px; height: 1px; background: var(--pv-rule); }
+
+/* 分段控件：1px 线框，选中项高对比；120ms 颜色过渡。 */
+.pv-segmented {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  border: 1px solid var(--pv-ink);
+  border-radius: var(--pv-radius);
+  overflow: hidden;
+}
+.pv-segmented button {
+  all: unset;
+  box-sizing: border-box;
+  height: 30px;
+  text-align: center;
+  font: inherit;
+  font-size: 13px;
+  color: var(--pv-ink);
+  cursor: pointer;
+  border-left: 1px solid var(--pv-ink);
+  transition: background-color 120ms var(--pv-ease), color 120ms var(--pv-ease);
+  line-height: 30px;
+}
+.pv-segmented button:first-child { border-left: 0; }
+.pv-segmented button:hover { background: var(--pv-paper-2); }
+.pv-segmented button[aria-pressed="true"] { background: var(--pv-curtain); color: var(--pv-curtain-ink); font-weight: 600; }
+.pv-segmented button:focus-visible { outline: 1px solid var(--pv-ink); outline-offset: -2px; }
+
+/* 开关：胶囊 36×20，墨线框；开时滑块炭黑 */
+.pv-switch {
+  all: unset;
+  box-sizing: border-box;
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border: 1px solid var(--pv-ink);
+  border-radius: 10px;
+  cursor: pointer;
+  background: transparent;
+  flex: none;
+}
+.pv-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--pv-ink-2);
+}
+.pv-switch[aria-checked="true"]::after { left: 19px; background: var(--pv-curtain); }
+.pv-switch:hover::after { background: var(--pv-ink); }
+.pv-switch[aria-checked="true"]:hover::after { background: var(--pv-curtain-2); }
+.pv-switch:focus-visible { outline: 1px solid var(--pv-ink); outline-offset: 2px; }
+
+/* 按钮 */
+.pv-btn {
+  all: unset;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 30px;
+  border-radius: var(--pv-radius);
+  cursor: pointer;
+  border: 1px solid var(--pv-ink);
+  color: var(--pv-ink);
+  background: transparent;
+}
+.pv-btn:hover { background: var(--pv-paper-2); }
+.pv-btn-primary { background: var(--pv-curtain); border-color: var(--pv-curtain); color: var(--pv-curtain-ink); }
+.pv-btn-primary:hover { background: var(--pv-curtain-2); border-color: var(--pv-curtain-2); }
+.pv-btn-text { all: unset; font: inherit; font-size: 13px; color: var(--pv-ink); cursor: pointer; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.pv-btn-text:hover { color: var(--pv-curtain); }
+.pv-btn:focus-visible, .pv-btn-text:focus-visible { outline: 1px solid var(--pv-ink); outline-offset: 2px; }
+
+/* 输入框：纸底、细线框，focus 框变墨，无光晕 */
+.pv-input {
+  all: unset;
+  box-sizing: border-box;
+  height: 32px;
+  padding: 0 10px;
+  width: 100%;
+  font: inherit;
+  font-size: 13px;
+  color: var(--pv-ink);
+  background: var(--pv-paper);
+  border: 1px solid var(--pv-rule);
+  border-radius: var(--pv-radius);
+}
+.pv-input:focus { border-color: var(--pv-ink); }
+.pv-input::placeholder { color: var(--pv-ink-2); }
+
+/* 标签 */
+.pv-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  background: var(--pv-paper-2);
+  border: 1px solid var(--pv-rule);
+  border-radius: var(--pv-radius);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--pv-ink);
+}
+.pv-tag button { all: unset; cursor: pointer; color: var(--pv-ink-2); line-height: 1; }
+.pv-tag button:hover { color: var(--pv-curtain); }
+
+/* 单选（幕布样式） */
+.pv-radio {
+  all: unset;
+  box-sizing: border-box;
+  display: block;
+  width: 240px;
+  padding: 10px;
+  border: 1px solid var(--pv-rule);
+  border-radius: var(--pv-radius);
+  cursor: pointer;
+  color: var(--pv-ink);
+}
+.pv-radio:hover { background: var(--pv-paper-2); }
+.pv-radio[aria-checked="true"] { border-color: var(--pv-curtain); box-shadow: inset 0 0 0 1px var(--pv-curtain); }
+.pv-radio:focus-visible { outline: 1px solid var(--pv-ink); outline-offset: 2px; }
+
+/* 示意图里的迷你幕布 */
+.pv-mini-curtain {
+  background: var(--pv-paper-2);
+  color: var(--pv-ink);
+  border: 1px solid var(--pv-rule);
+  border-radius: 6px;
+  font-size: 11px;
+  letter-spacing: .02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pv-mini-line { height: 6px; border-radius: 3px; background: var(--pv-rule); }
+.pv-btn:disabled { opacity: .5; cursor: default; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }

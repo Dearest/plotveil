@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "plotveil-proxy",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  // 只做 API。落地页在 landing/ 里单独部署到 plotveil.app，避免改 API 把官网带下线。
+  "routes": [
+    { "pattern": "api.plotveil.app", "custom_domain": true }
+  ],
+  "kv_namespaces": [
+    { "binding": "QUOTA", "id": "2b728ecadc43426b83daf798dd523c6c" }
+  ],
+  "vars": {
+    "DAILY_LIMIT": "2000",
+    "MAX_BATCH": "20",
+    "MAX_COMMENT_CHARS": "10000",
+    "TYPESAFE_URL": "https://api.typesafe.ai/v1/systemone",
+    "JEV_MODEL": "jev-latest"
+  }
+  // secret: TYPESAFE_API_KEY  (wrangler secret put TYPESAFE_API_KEY；本地开发放 .dev.vars)
+}

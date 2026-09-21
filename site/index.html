@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlotVeil: Keep the surprises.</title>
+<meta name="description" content="A spoiler blocker for YouTube comments. Every comment is covered before you can read it, checked by Jev, and the spoilers stay covered until you decide otherwise.">
+<link rel="canonical" href="https://plotveil.app/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://plotveil.app/">
+<meta property="og:title" content="PlotVeil: Keep the surprises.">
+<meta property="og:description" content="A spoiler blocker for YouTube comments. Covered first, judged by Jev, revealed when you ask.">
+<meta property="og:image" content="https://plotveil.app/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/icon-128.png">
+<style>
+@font-face{font-family:'Schibsted Grotesk';font-weight:400 700;font-display:swap;src:url(/fonts/SchibstedGrotesk-latin.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-weight:500;font-display:swap;src:url(/fonts/IBMPlexMono-500-latin.woff2) format('woff2')}
+
+:root{
+  --paper:#FAF9F6; --paper-2:#F0F1F5; --rule:#DDE0E8;
+  --ink:#24242B; --ink-2:#686B76;
+  --curtain:#24242B; --curtain-ink:#FAF9F6;
+  --amber:#F4B52E;
+  --mask-bg:#F0F1F5; --mask-hover:#E8E9EF; --mask-ink:#25262D;
+  --shadow:0 1px 2px rgba(36,36,43,.05);
+  --sans:'Schibsted Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --page:1120px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --paper:#1C1C21; --paper-2:#27282E; --rule:#3A3C45;
+    --ink:#F7EFE5; --ink-2:#ACAAB4;
+    --curtain:#F7EFE5; --curtain-ink:#24242B;
+    --mask-bg:#27282E; --mask-hover:#303139; --mask-ink:#F2EEE8;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+  h1 em::after{opacity:.5}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font:400 16px/1.55 var(--sans);letter-spacing:-.005em;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img{display:block;max-width:100%}
+a{color:inherit}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+
+.wrap{max-width:var(--page);margin:0 auto;padding:0 24px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.muted{color:var(--ink-2)}
+
+/* ── header ─────────────────────────────── */
+header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.bar{display:flex;align-items:center;gap:28px;height:60px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:17px;text-decoration:none;letter-spacing:-.02em;margin-right:auto}
+.brand img{width:26px;height:26px}
+nav{display:flex;gap:24px;font-size:14px}
+nav a{color:var(--ink-2);text-decoration:none}
+nav a:hover{color:var(--ink)}
+@media(max-width:860px){nav{display:none}}
+
+.btn{
+  display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;
+  border:1px solid var(--curtain);border-radius:4px;background:var(--curtain);color:var(--curtain-ink);
+  font:600 14px/1 var(--sans);text-decoration:none;white-space:nowrap;cursor:pointer;
+  transition:opacity 120ms ease,background 120ms ease,color 120ms ease;
+}
+.btn:hover{opacity:.86}
+.btn-lg{height:48px;padding:0 24px;font-size:15px}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn-ghost:hover{border-color:var(--ink);opacity:1}
+
+/* ── hero ───────────────────────────────── */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);gap:64px;align-items:center;padding:84px 24px 72px}
+@media(max-width:940px){.hero{grid-template-columns:1fr;gap:44px;padding:56px 24px 48px}}
+h1{font-size:clamp(40px,5.3vw,63px);letter-spacing:-.035em;text-wrap:balance}
+.title .shh{width:clamp(76px,7.6vw,104px);height:auto;margin-bottom:14px}
+h1 em{font-style:normal;position:relative;white-space:nowrap}
+h1 em::after{content:'';position:absolute;left:-.04em;right:-.04em;bottom:.08em;height:.3em;background:var(--amber);opacity:.32;z-index:-1;border-radius:2px}
+.lede{margin:22px 0 0;font-size:19px;line-height:1.5;color:var(--ink-2);max-width:34em}
+.cta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:32px}
+.trust{margin-top:18px;font:500 12px/1.6 var(--mono);color:var(--ink-2);letter-spacing:.02em}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--amber)}
+
+.chip{display:inline-flex;align-items:center;gap:10px;margin-top:30px;padding:10px 14px 10px 12px;border:1px solid var(--rule);border-radius:999px;background:var(--paper-2);text-decoration:none;font-size:13.5px;color:var(--ink-2);transition:border-color 120ms ease}
+.chip:hover{border-color:var(--ink-2)}
+.chip b{color:var(--ink);font-weight:600}
+.chip .pill{font:500 10.5px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;background:var(--amber);color:#24242B;border-radius:999px;padding:5px 8px}
+.fade{opacity:0;transform:translateY(10px);animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards}
+.fade:nth-child(1){animation-delay:.02s}.fade:nth-child(2){animation-delay:.08s}
+.fade:nth-child(3){animation-delay:.14s}.fade:nth-child(4){animation-delay:.2s}.fade:nth-child(5){animation-delay:.26s}
+@keyframes rise{to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.fade{animation:none;opacity:1;transform:none}html{scroll-behavior:auto}}
+
+/* ── demo ───────────────────────────────── */
+.demo{border:1px solid var(--rule);border-radius:10px;background:var(--paper);box-shadow:var(--shadow);overflow:hidden}
+.demo-top{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--rule);background:var(--paper-2)}
+.demo-top img{width:22px;height:22px}
+.demo-title{font-size:13px;font-weight:600}
+.demo-sub{font:500 11px/1 var(--mono);color:var(--ink-2);margin-left:auto;letter-spacing:.04em}
+.seg{display:flex;padding:12px 14px;gap:6px;border-bottom:1px solid var(--rule);align-items:center;flex-wrap:wrap}
+.seg-label{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--ink-2);margin-right:4px}
+.seg button{
+  height:28px;padding:0 11px;border:1px solid var(--rule);border-radius:4px;background:transparent;color:var(--ink-2);
+  font:500 12px/1 var(--sans);cursor:pointer;transition:all 120ms ease;
+}
+.seg button[aria-pressed="true"]{background:var(--curtain);border-color:var(--curtain);color:var(--curtain-ink)}
+.seg small{font:500 11px/1 var(--mono);color:var(--ink-2);margin-left:auto}
+
+.cmt{display:grid;grid-template-columns:32px 1fr;gap:12px;padding:14px;overflow:visible}
+.cmt+.cmt{border-top:1px solid var(--rule)}
+.av{width:32px;height:32px;border-radius:50%;background:var(--paper-2);border:1px solid var(--rule)}
+.who{font-size:12px;color:var(--ink-2);margin-bottom:5px}
+.who b{color:var(--ink);font-weight:600}
+.txt{font-size:14px;line-height:1.5}
+.mask{
+  position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;
+  min-height:34px;background:var(--mask-bg);color:var(--mask-ink);border:1px solid var(--rule);border-radius:6px;
+  padding:0 44px 0 8px;font:400 13px/1 var(--sans);text-align:left;cursor:pointer;
+  transition:background 120ms ease;
+}
+.mask:hover{background:var(--mask-hover)}
+.mask .lbl{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mask .act{flex:none;font-weight:500;color:var(--mask-ink);white-space:nowrap}
+.mask:hover .act{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+/* Keeper 趴在灰条上沿：双手压边框，身体藏在遮罩后面，与扩展内 veil.css 一致 */
+.mask .keeper{position:absolute;right:10px;bottom:calc(100% - 7px);width:32px;height:auto;pointer-events:none}
+.masked{padding-top:14px}
+.revealed{display:flex;align-items:flex-start;gap:8px}
+.rehide{
+  flex:none;width:24px;height:24px;border:0;background:transparent;padding:0;cursor:pointer;border-radius:4px;
+  opacity:.75;transition:opacity 120ms ease;
+}
+.rehide:hover{opacity:1}
+.rehide img{width:22px;height:22px}
+.demo-foot{padding:11px 14px;border-top:1px solid var(--rule);background:var(--paper-2);font:500 11px/1.5 var(--mono);color:var(--ink-2);letter-spacing:.03em}
+
+/* ── sections ───────────────────────────── */
+section{border-top:1px solid var(--rule);padding:84px 0}
+@media(max-width:940px){section{padding:56px 0}}
+.head{max-width:44em;margin-bottom:44px}
+.head h2{font-size:clamp(28px,3.4vw,38px);margin:14px 0 0}
+.head p{margin:16px 0 0;font-size:17px;color:var(--ink-2)}
+
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+@media(max-width:860px){.steps{grid-template-columns:1fr}}
+.step{background:var(--paper);padding:28px 24px 30px}
+.step .n{font:500 11px/1 var(--mono);color:var(--amber);letter-spacing:.1em}
+.step h3{font-size:19px;margin:16px 0 10px}
+.step p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.6}
+
+/* ── jev ────────────────────────────────── */
+.jev{background:var(--curtain);color:var(--curtain-ink);border-top:1px solid var(--rule)}
+.jev .eyebrow,.jev .head p{color:color-mix(in srgb,var(--curtain-ink) 64%,transparent)}
+.jev-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start}
+.jev-grid>*{min-width:0}
+@media(max-width:940px){.jev-grid{grid-template-columns:1fr;gap:36px}}
+.code{
+  max-width:100%;border:1px solid color-mix(in srgb,var(--curtain-ink) 18%,transparent);border-radius:10px;overflow:hidden;
+  font:500 12.5px/1.65 var(--mono);
+}
+.code .cap{padding:9px 14px;border-bottom:1px solid color-mix(in srgb,var(--curtain-ink) 14%,transparent);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:color-mix(in srgb,var(--curtain-ink) 58%,transparent)}
+.code pre{margin:0;padding:16px 14px;overflow-x:auto;white-space:pre}
+.code .k{color:color-mix(in srgb,var(--curtain-ink) 62%,transparent)}
+.code .v{color:var(--amber)}
+.code+.code{margin-top:14px}
+.facts{display:grid;gap:1px;background:color-mix(in srgb,var(--curtain-ink) 16%,transparent);border:1px solid color-mix(in srgb,var(--curtain-ink) 16%,transparent);border-radius:10px;overflow:hidden;grid-template-columns:1fr 1fr}
+@media(max-width:560px){.facts{grid-template-columns:1fr}}
+.fact{background:var(--curtain);padding:22px 20px}
+.fact .big{font:600 26px/1 var(--sans);letter-spacing:-.02em}
+.fact .big span{font-size:14px;font-weight:500;letter-spacing:0}
+.fact p{margin:10px 0 0;font-size:13.5px;line-height:1.55;color:color-mix(in srgb,var(--curtain-ink) 66%,transparent)}
+.jev-note{margin-top:26px;font-size:13.5px;line-height:1.6;color:color-mix(in srgb,var(--curtain-ink) 62%,transparent);max-width:46em}
+.jev-note a{color:inherit}
+.thresholds{margin-top:26px;border-top:1px solid color-mix(in srgb,var(--curtain-ink) 16%,transparent);padding-top:22px;display:grid;gap:10px}
+.thr{display:flex;align-items:baseline;gap:12px;font-size:14px}
+.thr b{font:500 12px/1 var(--mono);color:var(--amber);min-width:40px}
+.thr span{color:color-mix(in srgb,var(--curtain-ink) 66%,transparent)}
+
+/* ── states ─────────────────────────────── */
+.states{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+@media(max-width:940px){.states{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.states{grid-template-columns:1fr}}
+.state{background:var(--paper);padding:24px 20px 26px}
+.state img{width:56px;height:56px;margin-bottom:16px}
+.state img.perch{height:auto}
+.state h3{font-size:16px;display:flex;align-items:baseline;gap:8px}
+.state h3 em{font:500 10.5px/1 var(--mono);font-style:normal;color:var(--ink-2);letter-spacing:.06em;text-transform:uppercase}
+.state p{margin:9px 0 0;font-size:13.5px;line-height:1.55;color:var(--ink-2)}
+
+/* ── honesty / privacy ──────────────────── */
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:56px}
+@media(max-width:860px){.two{grid-template-columns:1fr;gap:36px}}
+.list{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.list li{padding:15px 0 15px 26px;border-bottom:1px solid var(--rule);font-size:15px;position:relative;line-height:1.55}
+.list li::before{content:'';position:absolute;left:2px;top:23px;width:10px;height:1px;background:var(--amber)}
+.list li b{font-weight:600}
+.list.no li::before{background:var(--ink-2);opacity:.4}
+.panel{border:1px solid var(--rule);border-radius:10px;padding:26px 24px;background:var(--paper-2)}
+.panel h3{font-size:17px;margin-bottom:12px}
+.panel p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.6}
+
+details{border-bottom:1px solid var(--rule)}
+details summary{list-style:none;cursor:pointer;padding:20px 40px 20px 0;font-size:16.5px;font-weight:600;position:relative}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:'+';position:absolute;right:6px;top:19px;font:500 18px/1 var(--mono);color:var(--ink-2)}
+details[open] summary::after{content:'-'}
+details p{margin:0 0 22px;max-width:52em;color:var(--ink-2);font-size:15px;line-height:1.6}
+.faq{border-top:1px solid var(--rule)}
+
+/* ── final ──────────────────────────────── */
+.final{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:48px;align-items:center}
+@media(max-width:780px){.final{grid-template-columns:1fr;gap:28px}.final img{width:150px}}
+.final h2{font-size:clamp(30px,4vw,44px)}
+.final p{margin:16px 0 0;font-size:17px;color:var(--ink-2);max-width:32em}
+
+footer{border-top:1px solid var(--rule);padding:32px 0 44px;font-size:13.5px;color:var(--ink-2)}
+.foot{display:flex;gap:20px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+.foot a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
+.foot-links{display:flex;gap:18px;flex-wrap:wrap}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:3px}
+</style>
+<script defer src="https://um.korx.cc/um.js" data-website-id="4e126f0a-a3f5-4721-8fe5-d6f70b726b25"></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="/"><img src="/icon-128.png" alt="">PlotVeil</a>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#jev">Powered by Jev</a>
+      <a href="#states">Keeper states</a>
+      <a href="#privacy">Privacy</a>
+    </nav>
+    <a class="btn" href="/install">Get PlotVeil</a>
+  </div>
+</header>
+
+<main>
+<div class="wrap hero">
+  <div>
+    <div class="hero-eyebrow fade"><span class="dot"></span><span class="eyebrow">Chrome extension · YouTube comments</span></div>
+    <div class="title fade">
+      <img class="shh" src="/keeper/hero-guard.png" alt="The Veil Keeper holding a finger to its lips" width="104">
+      <h1>Shh, keep the <em>surprises</em>.</h1>
+    </div>
+    <p class="lede fade">Comments arrive covered. Anything that would spoil what you are watching stays that way until you decide otherwise.</p>
+    <div class="cta fade">
+      <a class="btn btn-lg" href="/install">Install for Chrome, it's free</a>
+      <a class="btn btn-lg btn-ghost" href="#how">See how it works</a>
+    </div>
+    <p class="trust fade">Store review is still pending, so you <a href="/install">install it by hand</a> for now. About five minutes.</p>
+    <p class="trust fade">No account · No tracking · YouTube only · Open about what it sends</p>
+    <a class="chip fade" href="#jev"><span class="pill">New</span><span>Judgments run on <b>Jev</b>, TypeSafe's System One model. 70–500&thinsp;ms, no generated text</span></a>
+  </div>
+
+  <div class="demo fade" id="demo">
+    <div class="demo-top">
+      <img id="demo-keeper" src="/keeper/guard.png" alt="">
+      <span class="demo-title">Harrow Bay: Episode 6 breakdown</span>
+      <span class="demo-sub">live demo</span>
+    </div>
+    <div class="seg" role="group" aria-label="Sensitivity">
+      <span class="seg-label">Sensitivity</span>
+      <button type="button" data-t="0.85" aria-pressed="false">Easygoing</button>
+      <button type="button" data-t="0.7" aria-pressed="true">Standard</button>
+      <button type="button" data-t="0.5" aria-pressed="false">Cautious</button>
+      <small id="thr-note">hides p ≥ 0.70</small>
+    </div>
+    <div id="list"></div>
+    <div class="demo-foot" id="tally"></div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">01 / How it works</span>
+      <h2>Covered first. Judged second.</h2>
+      <p>Most blockers match keywords and lose the race against your eyes. PlotVeil inverts the order: nothing is readable until it has been checked, and a failed check keeps the cover on.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">STEP 01</div>
+        <h3>Covered on arrival</h3>
+        <p>As comments load, PlotVeil covers them in place. The original text is hidden rather than blurred, and the layout does not jump. Likes, replies and translation rows stay where they were.</p>
+      </div>
+      <div class="step">
+        <div class="n">STEP 02</div>
+        <h3>Read for meaning</h3>
+        <p>Each comment is judged against the video title, channel, and any other works you asked to protect. No keyword list, no "death" and "dies" blocklist. An oblique hint in Japanese counts as much as an explicit one in English.</p>
+      </div>
+      <div class="step">
+        <div class="n">STEP 03</div>
+        <h3>Reveal, and re-hide</h3>
+        <p>Clean comments come back instantly. Spoilers stay covered until you choose <b>Show anyway</b>. The Veil Keeper stays beside the comment, so one click puts the cover back.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="jev" id="jev">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">02 / The engine</span>
+      <h2>Jev answers in probabilities.</h2>
+      <p>PlotVeil runs on <b>Jev</b>, TypeSafe AI's System One model, released September 2026. Jev does not write text. It takes unstructured state in and returns typed, calibrated probabilities out, which is the shape of the question PlotVeil needs answered: would this comment ruin the episode?</p>
+    </div>
+    <div class="jev-grid">
+      <div>
+        <div class="code">
+          <div class="cap">What PlotVeil asks</div>
+<pre><span class="k">{</span>
+  <span class="k">"model":</span> <span class="v">"jev-latest"</span>,
+  <span class="k">"state": {</span>
+    <span class="k">"video_title":</span> <span class="v">"Harrow Bay: Episode 6 breakdown"</span>,
+    <span class="k">"channel":</span> <span class="v">"Late Night Rewatch"</span>,
+    <span class="k">"comments": {</span> <span class="k">"c42":</span> <span class="v">"Book readers: they kept…"</span> <span class="k">}</span>
+  <span class="k">},</span>
+  <span class="k">"questions": {</span>
+    <span class="k">"c42": {</span> <span class="k">"type":</span> <span class="v">"noul"</span>,
+      <span class="k">"instructions":</span> <span class="v">"state.comments.c42 reveals a</span>
+      <span class="v">plot point of the work being watched"</span> <span class="k">}</span>
+  <span class="k">}</span>
+<span class="k">}</span></pre>
+        </div>
+        <div class="code">
+          <div class="cap">What comes back</div>
+<pre><span class="k">{ "answers": { "c42": {</span> <span class="k">"type":</span> <span class="v">"noul"</span>, <span class="k">"noul":</span> <span class="v">0.93</span> <span class="k">} } }</span></pre>
+        </div>
+      </div>
+      <div>
+        <div class="facts">
+          <div class="fact">
+            <div class="big">70–500 <span>ms</span></div>
+            <p>TypeSafe's published end-to-end range for Jev, 40–200× faster than frontier LLMs. Fast enough that a comment can be covered, checked and uncovered before you scroll past it.</p>
+          </div>
+          <div class="fact">
+            <div class="big">1 <span>query per batch</span></div>
+            <p>Jev samples every answer in parallel, so twenty comments are one question set, not twenty round trips.</p>
+          </div>
+          <div class="fact">
+            <div class="big">0 <span>strings generated</span></div>
+            <p>No free text means no hallucinated verdict and no type errors to parse around. A comment cannot talk the model into letting it through.</p>
+          </div>
+          <div class="fact">
+            <div class="big">p <span>= calibrated probability</span></div>
+            <p>Every answer is a number, not a yes or no. The sensitivity setting moves the cut-off on that number, so changing it changes what stays covered.</p>
+          </div>
+        </div>
+        <div class="thresholds">
+          <div class="thr"><b>0.85</b><span><b>Easygoing</b>: only cover what is very likely a spoiler.</span></div>
+          <div class="thr"><b>0.70</b><span><b>Standard</b>: the default.</span></div>
+          <div class="thr"><b>0.50</b><span><b>Cautious</b>: a lower bar covers more, including the near misses.</span></div>
+        </div>
+        <p class="jev-note">Changing sensitivity re-uses the probabilities already in hand: no second request, no second charge. Requests go through PlotVeil's own Cloudflare Worker, which holds the API key and strips your installation ID before the model ever sees the text. Latency figures above are TypeSafe's; our own round trip measured around 0.7s in testing, and your network will differ.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="states">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">03 / The Veil Keeper</span>
+      <h2>What the Keeper is telling you.</h2>
+      <p>No badge counts, no toasts, no pop-ups mid-video. The Keeper in your toolbar, on the player and beside each covered comment shows what protection is doing right now. Hover or click it for the details.</p>
+    </div>
+    <div class="states">
+      <div class="state"><img src="/keeper/neutral.png" alt=""><h3>Neutral <em>idle</em></h3><p>Nothing to do here: not a video page, or the comments have not loaded yet. It will not call this "safe."</p></div>
+      <div class="state"><img src="/keeper/scout.png" alt=""><h3>Scout <em>checking</em></h3><p>Eyes open, first batch in flight. Everything waiting on a verdict is already covered.</p></div>
+      <div class="state"><img src="/keeper/calm.png" alt=""><h3>Calm <em>clear so far</em></h3><p>Nothing spoiler-ish in what has been checked. Honest about the "so far": comments still loading are still pending.</p></div>
+      <div class="state"><img src="/keeper/guard.png" alt=""><h3>Guard <em>protecting</em></h3><p>Spoilers found and held under cover. This is the state you will see most on an active comment section.</p></div>
+      <div class="state"><img src="/keeper/peek.png" alt=""><h3>Peek <em>revealed</em></h3><p>You chose to read something. The Keeper waits beside it, one click from putting the cover back.</p></div>
+      <div class="state"><img src="/keeper/concerned.png" alt=""><h3>Concerned <em>error</em></h3><p>A check timed out, the quota ran out, or a comment was too long. Covers stay on, the reason is spelled out, and nothing flashes red at you.</p></div>
+      <div class="state"><img src="/keeper/closed.png" alt=""><h3>Closed <em>off</em></h3><p>Protection paused, or you are on a channel you marked as trusted. Covers come off, nothing is sent, nothing is judged.</p></div>
+      <div class="state" style="display:flex;flex-direction:column;justify-content:center">
+        <img class="perch" src="/keeper/mask-perch.png" alt="">
+        <h3 style="font-size:15px">Mask Perch <em>component pose</em></h3>
+        <p>The Keeper resting on a comment cover is fitted to that edge. It is not the Peek state; text carries the comment's checking, hidden or failed status.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="honest">
+  <div class="wrap two">
+    <div>
+      <span class="eyebrow">04 / Plain terms</span>
+      <h2 style="font-size:clamp(28px,3.4vw,38px);margin:14px 0 28px">What it does, in full.</h2>
+      <ul class="list">
+        <li><b>Covers before it judges.</b> Text is hidden with <code>visibility</code>, not blur, so there is no half-readable moment.</li>
+        <li><b>Protects works you are not even watching.</b> Add titles you are behind on, and comments that spoil them get covered here too.</li>
+        <li><b>Survives the page.</b> The covers keep up through infinite scroll, replies, edited comments, theatre mode, SPA navigation, light and dark.</li>
+        <li><b>Trusted channels.</b> Somewhere you know is spoiler-free? Turn protection off for that channel only.</li>
+        <li><b>Reversible both ways.</b> One click lifts a cover, one click puts it back.</li>
+      </ul>
+    </div>
+    <div>
+      <span class="eyebrow">Honest limits</span>
+      <h2 style="font-size:clamp(28px,3.4vw,38px);margin:14px 0 28px">What it will not claim.</h2>
+      <ul class="list no">
+        <li>Comments that have not loaded yet have not been checked. "Clear so far" never means "all clear."</li>
+        <li>A judgment can be wrong in both directions. That is why every cover lifts with one click and every reveal goes back.</li>
+        <li>Video titles, thumbnails and recommendations are untouched for now. This is a comment tool.</li>
+        <li>YouTube comments only today. Bilibili comments and danmaku share the same judgment core, but they are not supported yet and are not sold as if they were.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="privacy">
+  <div class="wrap two">
+    <div>
+      <span class="eyebrow">05 / Privacy</span>
+      <h2 style="font-size:clamp(28px,3.4vw,38px);margin:14px 0 20px">To judge a comment, PlotVeil has to send it. Here is everything that goes out.</h2>
+      <p class="muted" style="font-size:16px;line-height:1.6">While protection is on, comments near your viewport go out with the video title, the channel, any works you asked to protect, and a random installation ID used only for the daily quota. The model never receives that ID.</p>
+      <p style="margin-top:22px"><a class="btn btn-ghost" href="/privacy">Read the privacy page</a></p>
+    </div>
+    <div class="panel">
+      <h3>Never sent</h3>
+      <p>Your Google account. Cookies. Watch history. Page URLs. Comment author names. Anything from any site other than youtube.com.</p>
+      <h3 style="margin-top:22px">Never present</h3>
+      <p>The extension carries no analytics, no tracking pixels and no ad identifiers. This website counts page views with a self-hosted, cookieless analytics script that stores no personal data and no cross-site identifier. The fonts you are reading are served from this domain.</p>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow">06 / Questions</span>
+      <h2>Before you install.</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Does it slow the comment section down?</summary><p>Comments appear as fast as YouTube renders them, with the cover already on. Jev's speed is the reason that cover can lift again within a fraction of a second rather than after a visible pause. Batches of up to 20 comments go out at once, with at most two requests in flight.</p></details>
+      <details><summary>What happens when a check fails?</summary><p>The cover stays on. A failed, timed-out or over-quota check is never treated as "safe". The Keeper turns Concerned, tells you which of those it was, and offers a retry when retrying would help. You can still reveal any individual comment by hand.</p></details>
+      <details><summary>Will it hide comments that are not spoilers?</summary><p>Sometimes, especially on Cautious. Every cover is one click from lifting, and lifting one never asks you to disable protection for the rest.</p></details>
+      <details><summary>Is it free?</summary><p>Yes, with a daily judgment quota per installation to keep the model costs sane. If you hit it, PlotVeil says so plainly and tells you when it resets.</p></details>
+      <details><summary>Why am I installing it by hand?</summary><p>PlotVeil is waiting on Chrome Web Store review. Until it clears, the only way to run it is to download the ZIP and load it as an unpacked extension, which takes about five minutes. Chrome will remind you on startup that a developer-mode extension is running, and an unpacked extension does not update itself. The <a href="/install">install page</a> walks through both.</p></details>
+      <details><summary>Does it work on other browsers or sites?</summary><p>Chrome and Chromium-based browsers, on youtube.com. Firefox and the next set of sites are on the roadmap; neither is claimed as working today.</p></details>
+      <details><summary>Who makes it?</summary><p>One independent developer. Not affiliated with YouTube, Google or TypeSafe AI.</p></details>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap final">
+    <div>
+      <h2>Go read the comments.</h2>
+      <p>The good ones are still down there. PlotVeil keeps the rest covered until you have finished the episode.</p>
+      <div class="cta">
+        <a class="btn btn-lg" href="/install">Install for Chrome, it's free</a>
+      </div>
+    </div>
+    <img src="/keeper/hero-peek.png" alt="The Veil Keeper peeking out from under its hood" width="220">
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>PlotVeil · plotveil.app · Built by an independent developer</span>
+    <span class="foot-links">
+      <a href="/install">Install</a>
+      <a href="/privacy">Privacy</a>
+      <a href="mailto:hello@plotveil.app">hello@plotveil.app</a>
+      <a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">Judgments run on Jev</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+// 演示区：复用产品真实语义。概率固定，阈值决定遮不遮；揭开只影响当前会话。
+const COMMENTS = [
+  { who: '@driftwood', when: '2 days ago', p: 0.04, text: 'Rewatched the first three episodes tonight. The sound design is doing so much work and nobody talks about it.' },
+  { who: '@coastlinereader', when: '1 day ago', p: 0.93, text: 'Book readers, they kept the lighthouse chapter almost line for line, including who does not walk back down the stairs.' },
+  { who: '@m_tanaka', when: '19 hours ago', p: 0.78, text: '第七話のラスト、あの人が戻ってこないの、正直まだ受け止められてない。' },
+  { who: '@nightbus', when: '6 hours ago', p: 0.62, text: 'Episode 6 is where it finally clicks. Stay off the subreddit until you get there, seriously.' },
+  { who: '@quietpixel', when: '2 hours ago', p: 0.02, text: 'Does anyone know what they shot the harbour scenes on? The grain looks gorgeous.' },
+];
+
+const list = document.getElementById('list');
+const tally = document.getElementById('tally');
+const keeper = document.getElementById('demo-keeper');
+const thrNote = document.getElementById('thr-note');
+const segButtons = document.querySelectorAll('.seg button');
+let threshold = 0.7;
+const revealed = new Set();
+
+function render() {
+  list.innerHTML = '';
+  let hidden = 0;
+  COMMENTS.forEach((c, i) => {
+    const masked = c.p >= threshold;
+    if (masked && !revealed.has(i)) hidden++;
+
+    const row = document.createElement('div');
+    row.className = 'cmt';
+    row.innerHTML = '<div class="av"></div>';
+
+    const main = document.createElement('div');
+    main.innerHTML = '<div class="who"><b>' + c.who + '</b> · ' + c.when + '</div>';
+
+    if (masked && !revealed.has(i)) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mask';
+      btn.setAttribute('aria-label', 'Possible spoiler hidden. Show anyway');
+      btn.innerHTML = '<span class="lbl">Possible spoiler hidden</span><span class="act">Show anyway</span><img class="keeper" src="/keeper/mask-perch.png" alt="">';
+      btn.addEventListener('click', () => { revealed.add(i); render(); });
+      const holder = document.createElement('div');
+      holder.className = 'masked';
+      holder.appendChild(btn);
+      main.appendChild(holder);
+    } else {
+      const wrap = document.createElement('div');
+      wrap.className = 'txt' + (revealed.has(i) ? ' revealed' : '');
+      const span = document.createElement('span');
+      span.textContent = c.text;
+      wrap.appendChild(span);
+      if (revealed.has(i)) {
+        const hide = document.createElement('button');
+        hide.type = 'button';
+        hide.className = 'rehide';
+        hide.title = 'Hide this comment again';
+        hide.setAttribute('aria-label', 'Hide this comment again');
+        hide.innerHTML = '<img src="/keeper/peek.png" alt="">';
+        hide.addEventListener('click', () => { revealed.delete(i); render(); });
+        wrap.appendChild(hide);
+      }
+      main.appendChild(wrap);
+    }
+    row.appendChild(main);
+    list.appendChild(row);
+  });
+
+  // 状态优先级与产品一致：已揭开 > 已保护 > 已检查无剧透
+  const state = revealed.size ? 'peek' : hidden ? 'guard' : 'calm';
+  keeper.src = '/keeper/' + state + '.png';
+  keeper.alt = '';
+  tally.textContent = 'Checked ' + COMMENTS.length + ' · Hidden ' + hidden + ' · Revealed ' + revealed.size + ' · Pending 0';
+}
+
+segButtons.forEach(b => b.addEventListener('click', () => {
+  threshold = Number(b.dataset.t);
+  segButtons.forEach(o => o.setAttribute('aria-pressed', String(o === b)));
+  thrNote.textContent = 'hides p ≥ ' + threshold.toFixed(2);
+  revealed.clear();
+  render();
+}));
+
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+/* 注入到 YouTube 文档的极少量规则：只作用于我们自己加的 class，不动 YouTube 的样式 */
+.pv-veiled { position: relative !important; }
+.pv-veiled > :not(.pv-host) { visibility: hidden !important; }
+.pv-veiled.pv-collapse > :not(.pv-host) { display: none !important; }
+.pv-veiled.pv-collapse { min-height: 24px; }
+.pv-host { position: absolute; inset: 0; z-index: 2; }
+.pv-veiled.pv-collapse > .pv-host { position: relative; height: 24px; }
+.pv-revealed { position: relative !important; }
+.pv-revealed { padding-inline-end: 28px !important; }
+.pv-revealed > .pv-host { inset: 0 0 auto auto; width: 24px; height: 24px; }

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlotVeil: Privacy</title>
+<meta name="description" content="What PlotVeil sends, what it stores, and what it never touches.">
+<link rel="canonical" href="https://plotveil.app/privacy">
+<link rel="icon" href="/icon-128.png">
+<style>
+@font-face{font-family:'Schibsted Grotesk';font-weight:400 700;font-display:swap;src:url(/fonts/SchibstedGrotesk-latin.woff2) format('woff2')}
+@font-face{font-family:'IBM Plex Mono';font-weight:500;font-display:swap;src:url(/fonts/IBMPlexMono-500-latin.woff2) format('woff2')}
+:root{
+  --paper:#FAF9F6;--paper-2:#F0F1F5;--rule:#DDE0E8;--ink:#24242B;--ink-2:#686B76;
+  --curtain:#24242B;--curtain-ink:#FAF9F6;--amber:#F4B52E;
+  --sans:'Schibsted Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+@media(prefers-color-scheme:dark){
+  :root{--paper:#1C1C21;--paper-2:#27282E;--rule:#3A3C45;--ink:#F7EFE5;--ink-2:#ACAAB4;--curtain:#F7EFE5;--curtain-ink:#24242B}
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--sans);letter-spacing:-.005em;-webkit-font-smoothing:antialiased}
+header{border-bottom:1px solid var(--rule)}
+.wrap{max-width:720px;margin:0 auto;padding:0 24px}
+.bar{display:flex;align-items:center;height:60px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:17px;text-decoration:none;color:inherit;letter-spacing:-.02em}
+.brand img{width:26px;height:26px;display:block}
+main{padding:64px 0 72px}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+h1{font-size:clamp(34px,5vw,46px);font-weight:600;letter-spacing:-.03em;line-height:1.1;margin:14px 0 0}
+.sub{color:var(--ink-2);margin:14px 0 0;font-size:17px}
+h2{font-size:20px;font-weight:600;letter-spacing:-.02em;margin:44px 0 0;padding-top:22px;border-top:1px solid var(--rule)}
+p{margin:14px 0 0}
+ul{margin:14px 0 0;padding-left:20px}
+li{margin:8px 0}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
+code{font:500 13.5px/1 var(--mono);background:var(--paper-2);border:1px solid var(--rule);border-radius:4px;padding:2px 5px}
+.callout{margin:28px 0 0;padding:20px 22px;border:1px solid var(--rule);border-left:2px solid var(--amber);border-radius:8px;background:var(--paper-2)}
+.callout p{margin:0}
+footer{border-top:1px solid var(--rule);padding:28px 0 40px;color:var(--ink-2);font-size:13.5px}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px;border-radius:3px}
+</style>
+<script defer src="https://um.korx.cc/um.js" data-website-id="4e126f0a-a3f5-4721-8fe5-d6f70b726b25"></script>
+</head>
+<body>
+<header><div class="wrap bar"><a class="brand" href="/"><img src="/icon-128.png" alt="">PlotVeil</a></div></header>
+
+<main class="wrap">
+  <span class="eyebrow">Privacy</span>
+  <h1>To judge a comment, PlotVeil sends it.</h1>
+  <p class="sub">Last updated 21 September 2026. The short version: comment text, video context and optional protected titles are sent for spoiler checks, along with an anonymous installation ID used only for the daily quota.</p>
+
+  <div class="callout"><p>No analytics, no tracking pixels and no third-party scripts in the extension. This website counts page views with a self-hosted, cookieless analytics script (Umami on um.korx.cc). Fonts are served from this domain.</p></div>
+
+  <h2>What PlotVeil sends</h2>
+  <p>While protection is enabled, comments near the viewport are sent with the video's title, channel, any works you have chosen to protect, and an anonymous installation ID. The extension does not add your Google account, cookies, watch history, comment author name or page URL to this request. Network requests carry an IP address, and comment text itself may contain personal information.</p>
+  <p>Comments are sent in batches of up to 20, only for the video you are watching, only while PlotVeil is switched on.</p>
+
+  <h2>What PlotVeil stores</h2>
+  <ul>
+    <li><strong>On your device:</strong> settings, judgment probabilities keyed by hashed evidence in a session cache, and a random installation identifier (shown as Installation in Settings). It is not linked to a PlotVeil account.</li>
+    <li><strong>In the proxy's quota store:</strong> daily counts keyed by the installation ID, expiring after 48 hours. Application code does not persist comment text in this store.</li>
+  </ul>
+
+  <h2>Who else sees the text</h2>
+  <p>Requests pass through a Cloudflare Worker to TypeSafe's Jev API. The model receives comment text, video title, channel and optional protected titles, but not the installation ID. Cloudflare and TypeSafe operate their own infrastructure; this description does not promise retention practices beyond PlotVeil's application code.</p>
+
+  <h2>What PlotVeil does not do</h2>
+  <ul>
+    <li>No analytics, no tracking pixels and no third-party scripts in the extension itself.</li>
+    <li>No reading of any page other than youtube.com.</li>
+    <li>No sale of comment text or use for unrelated advertising in PlotVeil's application.</li>
+  </ul>
+
+  <h2>This website</h2>
+  <p>Page views on plotveil.app are counted by Umami, a self-hosted analytics service running on um.korx.cc. It sets no cookies, stores no personal data and builds no cross-site profile; what is recorded is the page, referrer, and coarse browser, device and country information derived from the request. This applies to the website only — the extension sends nothing to it.</p>
+
+  <h2>Permissions</h2>
+  <p><code>storage</code> for your settings, and access to <code>youtube.com</code> so the extension can read comments on the page you are on. Nothing else.</p>
+
+  <h2>Questions</h2>
+  <p><a href="mailto:hello@plotveil.app">hello@plotveil.app</a></p>
+</main>
+
+<footer><div class="wrap foot">
+  <span>PlotVeil · plotveil.app</span>
+  <span><a href="/">← Back to PlotVeil</a></span>
+</div></footer>
+</body>
+</html>

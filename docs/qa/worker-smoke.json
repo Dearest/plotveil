@@ -1,0 +1,21 @@
+{
+  "installId": "pv_smoke0001",
+  "context": { "video_title": "Dune: Part Three | Official Trailer", "channel": "Warner Bros. Pictures", "protected_titles": [] },
+  "question": {
+    "instructions": "Look at comment {{id}} in state.comments. It appears under the YouTube video titled 'Dune: Part Three | Official Trailer' by Warner Bros. Pictures. Does this comment reveal a specific plot event, character fate, ending, twist, or result that a viewer who has not yet watched the work would not want to know in advance? Reactions, opinions, praise, jokes and questions that do not disclose concrete events are NOT spoilers.",
+    "criteria": {
+      "true": "Reveals a concrete plot event, death, twist, ending, or result.",
+      "false": "Opinion, reaction, praise, joke, question, or discussion without disclosing concrete events."
+    }
+  },
+  "comments": [
+    { "id": "c1", "text": "I can't believe they actually killed Paul in the third act, did not see that coming" },
+    { "id": "c2", "text": "The score in this trailer is incredible, Zimmer never misses" },
+    { "id": "c3", "text": "Book readers know Chani leaves him at the end and honestly the movie should keep that" },
+    { "id": "c4", "text": "Who else is watching this for the 10th time" },
+    { "id": "c5", "text": "Anyone know when tickets go on sale?" },
+    { "id": "c6", "text": "So the twist is that Alia is the one who stabs the Baron, they finally showed it" },
+    { "id": "c7", "text": "This looks worse than part two ngl" },
+    { "id": "c8", "text": "Bro spoiler alert: sandworms are in it" }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "state": {
+    "video_title": "Dune: Part Three | Official Trailer",
+    "channel": "Warner Bros. Pictures",
+    "comments": {
+      "c1": "I can't believe they actually killed Paul in the third act, did not see that coming",
+      "c2": "The score in this trailer is incredible, Zimmer never misses",
+      "c3": "Book readers know Chani leaves him at the end and honestly the movie should keep that",
+      "c4": "Who else is watching this for the 10th time",
+      "c5": "Anyone know when tickets go on sale?",
+      "c6": "So the twist is that Alia is the one who stabs the Baron, they finally showed it",
+      "c7": "This looks worse than part two ngl",
+      "c8": "Bro spoiler alert: sandworms are in it"
+    }
+  },
+  "questions": {
+    "c1": {
+      "type": "noul",
+      "instructions": "Look at comment c1 in state.comments. It appears under the YouTube video titled 'Dune: Part Three | Official Trailer' by Warner Bros. Pictures. Does this comment reveal a specific plot event, character fate, ending, twist, or result that a viewer who has not yet watched the work would not want to know in advance? Reactions, opinions, praise, jokes and questions that do not disclose concrete events are NOT spoilers.",
+      "criteria": {
+        "true": "Reveals a concrete plot event, death, twist, ending, or result.",
+        "false": "Opinion, reaction, praise, joke, question, or discussion without disclosing concrete events."
+      }
+    },
+    "c2": {
+      "type": "noul",
+      "instructions": "Look at comment c2 in state.comments. It appears under the YouTube video titled 'Dune: Part Three | Official Trailer' by Warner Bros. Pictures. Does this comment reveal a specific plot event, character fate, ending, twist, or result that a viewer who has not yet watched the work would not want to know in advance? Reactions, opinions, praise, jokes and questions that do not disclose concrete events are NOT spoilers.",
+      "criteria": {
+        "true": "Reveals a concrete plot event, death, twist, ending, or result.",
+        "false": "Opinion, reaction, praise, joke, question, or discussion without disclosing concrete events."
+      }
+    },
+    "c3": {
+      "type": "noul",
+      "instructions": "Look at comment c3 in state.comments. It appears under the YouTube video titled 'Dune: Part Three | Official Trailer' by Warner Bros. Pictures. Does this comment reveal a specific plot event, character fate, ending, twist, or result that a viewer who has not yet watched the work would not want to know in advance? Reactions, opinions, praise, jokes and questions that do not disclose concrete events are NOT spoilers.",
+      "criteria": {
+        "true": "Reveals a concrete plot event, death, twist, ending, or result.",
+        "false": "Opinion, reaction, praise, joke, question, or discussion without disclosing concrete events."
+      }
+    },
+    "c4": {
+      "type": "noul",
+      "instructions": "Look at comment c4 in state.comments. It appears under the YouTube video titled 'Dune: Part Three | Official Trailer' by Warner Bros. Pictures. Does this comment reveal a specific plot event, character fate, ending, twist, or result that a viewer who has not yet watched the work would not want to know in advance? Reactions, opinions, praise, jokes and questions that do not disclose concrete events are NOT spoilers.",
+      "criteria": {
+        "true": "Reveals a concrete plot event, death, twist, ending, or result.",
+        "false": "Opinion, reaction, praise, joke, question, or discussion without disclosing concrete events."
+      }
+    },
+    "c5": {
+      "type": "noul",
+      "instructions": "Look at comment c5 in state.comments. It appears under the YouTube video titled 'Dune: Part Three | Official Trailer' by Warner Bros. Pictures. Does this comment reveal a specific plot event, character fate, ending, twist, or result that a viewer who has not yet watched the work would not want to know in advance? Reactions, opinions, praise, jokes and questions that do not disclose concrete events are NOT spoilers.",
+      "criteria": {
+        "true": "Reveals a concrete plot event, death, twist, ending, or result.",
+        "false": "Opinion, reaction, praise, joke, question, or discussion without disclosing concrete events."
+      }
+    },
+    "c6": {
+      "type": "noul",
+      "instructions": "Look at comment c6 in state.comments. It appears under the YouTube video titled 'Dune: Part Three | Official Trailer' by Warner Bros. Pictures. Does this comment reveal a specific plot event, character fate, ending, twist, or result that a viewer who has not yet watched the work would not want to know in advance? Reactions, opinions, praise, jokes and questions that do not disclose concrete events are NOT spoilers.",
+      "criteria": {
+        "true": "Reveals a concrete plot event, death, twist, ending, or result.",
+        "false": "Opinion, reaction, praise, joke, question, or discussion without disclosing concrete events."
+      }
+    },
+    "c7": {
+      "type": "noul",
+      "instructions": "Look at comment c7 in state.comments. It appears under the YouTube video titled 'Dune: Part Three | Official Trailer' by Warner Bros. Pictures. Does this comment reveal a specific plot event, character fate, ending, twist, or result that a viewer who has not yet watched the work would not want to know in advance? Reactions, opinions, praise, jokes and questions that do not disclose concrete events are NOT spoilers.",
+      "criteria": {
+        "true": "Reveals a concrete plot event, death, twist, ending, or result.",
+        "false": "Opinion, reaction, praise, joke, question, or discussion without disclosing concrete events."
+      }
+    },
+    "c8": {
+      "type": "noul",
+      "instructions": "Look at comment c8 in state.comments. It appears under the YouTube video titled 'Dune: Part Three | Official Trailer' by Warner Bros. Pictures. Does this comment reveal a specific plot event, character fate, ending, twist, or result that a viewer who has not yet watched the work would not want to know in advance? Reactions, opinions, praise, jokes and questions that do not disclose concrete events are NOT spoilers.",
+      "criteria": {
+        "true": "Reveals a concrete plot event, death, twist, ending, or result.",
+        "false": "Opinion, reaction, praise, joke, question, or discussion without disclosing concrete events."
+      }
+    }
+  },
+  "model": "jev-latest"
+}

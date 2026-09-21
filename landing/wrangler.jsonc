@@ -1,0 +1,14 @@
+{
+  "$schema": "../proxy/node_modules/wrangler/config-schema.json",
+  "name": "plotveil-site",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": false,
+  "observability": { "enabled": true },
+  // 落地页与隐私页。与 plotveil-proxy 分开部署：改 API 不应该让官网下线。
+  "routes": [
+    { "pattern": "plotveil.app", "custom_domain": true },
+    { "pattern": "www.plotveil.app", "custom_domain": true }
+  ],
+  // 纯静态，没有 main：/privacy 走 html_handling，未命中返回 site/404 前先试 .html。
+  "assets": { "directory": "../site", "not_found_handling": "404-page", "html_handling": "auto-trailing-slash" }
+}
